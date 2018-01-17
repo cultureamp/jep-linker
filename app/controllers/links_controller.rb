@@ -28,20 +28,19 @@ class LinksController < ApplicationController
         long_url: params[:link][:long_url],
         short_url: params[:link][:short_url],
         )
-        if link.valid?
-          render plain: "Your CUSTOM link is created: #{link.short_url}"
-          return
-        else
-          render plain: "Short URL needs to be UNIQUE. #{link.short_url} already exists."
-          return
-        end
+      if link.valid?
+        render plain: "Your CUSTOM link is created: #{link.short_url}"
+        return
+      else
+        render plain: "Short URL needs to be UNIQUE. #{link.short_url} already exists."
+        return
+      end
     end
-
   end
 
   def redirect
     @link = Link.find_by(short_url: params[:short_url])
-    redirect_to "http://#{@link.long_url}"
+    redirect_to Addressable::URI.heuristic_parse(@link.long_url).to_s
   end
 
   # private
