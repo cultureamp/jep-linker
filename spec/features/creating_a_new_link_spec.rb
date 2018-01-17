@@ -59,4 +59,10 @@ RSpec.feature "Creating a new link" do
     link = Link.last
     expect(page).to have_content("Short URL needs to be UNIQUE. #{link.short_url} already exists.")
   end
+
+  scenario "user is redirected to external site", js: true do
+    link = Link.create(long_url: "www.juliehuang.co.nz", short_url: "jules")
+    visit "http://localhost:3000/#{link.short_url}"
+    expect(page).to have_current_path(Addressable::URI.heuristic_parse(link.long_url).to_a)
+  end
 end
