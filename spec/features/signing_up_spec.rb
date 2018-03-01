@@ -5,13 +5,7 @@ require 'rails_helper'
 # clicks ?
 # Sees "you have signed up
 RSpec.feature "signing up" do
-  # before do
-  #   @user = FactoryBot.create(:user)
-  #   @user.save
-  #   sign_in(@user)
-  # end
-
-  scenario "takes user to hello page if successful" do
+  scenario "signs a user up with valid attributes" do
     visit new_user_registration_path
     fill_in :user_email, with: 'example@example.com'
     fill_in :user_password, with: 'jep_password'
