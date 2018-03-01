@@ -2,6 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature "Creating a new link" do
+
   scenario "displays error when no link is provided" do
     visit "/"
     click_button "Create Link"

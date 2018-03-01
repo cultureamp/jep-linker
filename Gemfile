@@ -45,6 +45,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'launchy'
+  gem 'factory_bot_rails'
 end
 
 group :development do
