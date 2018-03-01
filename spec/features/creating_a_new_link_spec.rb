@@ -1,28 +1,6 @@
 
 require 'rails_helper'
 
-#  TESTING PLAN
-
-#  FEATURE TEST 1) displays validation error message if there is no URL specified in field
-
-#  FEATURE TEST 2) returns short URL from long URL
-#  - F2 UNIT TEST: Check if long URL already exists in database
-#  - F2 UNIT TEST: Generate short url if not
-#  - F2 UNIT TEST: Ensures no two URLs have the same `short_link` value in database
-
-#  FEATURE TEST 3) re-directs user to long  URL from short URL
-
-#  FEATURE TEST 4) can generate a custom short URL if user requests
-#  - F4 UNIT TEST: Generates a short URL automatically when custom field blank
-#  - F4 UNIT TEST: Generates a short URL with custom link if custom field populated
-#  - F4 UNIT TEST: Generates flash error if custom short URL already exists
-#  - F4 UNIT TEST: Form fields stay populated with entered values
-
-#  FEATURE TEST 5) Validates long URLs to be working URLs
-
-#  FEATUE TEST 6) Validates that other short-link services are NOT being permitted in database
-
-
 RSpec.feature "Creating a new link" do
   scenario "displays error when no link is provided" do
     visit "/"
@@ -57,12 +35,13 @@ RSpec.feature "Creating a new link" do
     fill_in 'Short URL', with: 'abc123'
     click_button "Create Link"
     link = Link.last
-    expect(page).to have_content("Short URL needs to be UNIQUE. #{link.short_url} already exists.")
+    save_and_open_page
+    expect(page).to have_content("Your link could not be saved Short url has already been taken Long URL Short URL")
   end
 
   scenario "user is redirected to external site", js: true do
     link = Link.create(long_url: "www.juliehuang.co.nz", short_url: "jules")
-    visit "http://localhost:3000/#{link.short_url}"
-    expect(page).to have_current_path(Addressable::URI.heuristic_parse(link.long_url).to_a)
+    visit "#{link.short_url}"
+    expect(page).to have_current_path(link.long_url)
   end
 end

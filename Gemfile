@@ -44,6 +44,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'launchy'
 end
 
 group :development do

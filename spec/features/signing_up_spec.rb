@@ -12,7 +12,17 @@ RSpec.feature "signing up" do
     fill_in :user_email, with: 'example@example.com'
     fill_in :user_password, with: 'jep_password'
     fill_in :user_password_confirmation, with: 'jep_password'
-    click_button "Sign up"
+    click_button "Sign Up"
     expect(page).to have_content("Hello, example@example.com")
+  end
+
+  scenario "rejects invalid emails" do
+    visit "/etcetcetc"
+    click_button "_"
+    fill_in :user_email, with: 'garbage info'
+    fill_in :user_password, with: 'jep_password'
+    fill_in :user_password_confirmation, with: 'jep_password'
+    click_button "Sign Up"
+    expect(page).to have_content("invalid email, please try again")
   end
 end
