@@ -1,5 +1,6 @@
 require 'pry'
 class Link < ApplicationRecord
+  belongs_to :user, optional: true
   before_validation :process_long_url, on: :create
   validates :short_url, :long_url, uniqueness: true
 

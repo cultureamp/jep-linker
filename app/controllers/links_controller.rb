@@ -1,3 +1,5 @@
+require 'pry'
+
 class LinksController < ApplicationController
 
   def new
@@ -14,14 +16,15 @@ class LinksController < ApplicationController
       return
     end
 
+    scope = user_signed_in? ? current_user.links : Link
     if link_params[:short_url].blank?
-      link = Link.find_by(long_url: link_params[:long_url])
+      link = scope.find_by(long_url: link_params[:long_url])
       if link
         render plain: "Your link ALREADY EXISTS and is #{link.short_url}"
         return
       end
 
-      @link = Link.new(long_url: link_params[:long_url])
+      @link = scope.new(long_url: link_params[:long_url])
       if @link.save
         @link.shorten_url
         @link.save!
@@ -34,7 +37,7 @@ class LinksController < ApplicationController
     end
 
     if link_params[:long_url] && link_params[:short_url]
-      @link = Link.new(long_url: link_params[:long_url], short_url: link_params[:short_url])
+      @link = scope.new(long_url: link_params[:long_url], short_url: link_params[:short_url])
       if @link.save
         flash[:notice] = "Your link was saved successfully"
         redirect_to @link
@@ -59,4 +62,8 @@ private
 
 def link_params
   params.require(:link).permit(:long_url, :short_url)
+end
+
+def user_logged_in
+
 end
