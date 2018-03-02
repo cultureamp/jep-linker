@@ -17,14 +17,14 @@ RSpec.feature "Creating a new link" do
   scenario "when a user enters no URL they should see an error message" do
     visit "/"
     click_button "Shorten"
-    assert_selector "#notice", text: "URL is invalid" 
+    assert_selector "#error", text: "Long url can't be blank" 
   end
 
   scenario "when user clicks short link, they should be redirected back to long link", js: true do
     click_button "Shorten"
     link = Link.first
     click_link "http://www.linker/#{link.short_url}"
-    expect(page).to have_current_path(link.long_url)
+    expect(page).to have_current_path("https://www.ryanbigg.com")
   end
 
   scenario "user clicks Custom url button", js: true do
@@ -34,11 +34,13 @@ RSpec.feature "Creating a new link" do
   end
 
   scenario "user enters custom short url", js: true do
+    visit "/"
     page.execute_script("showCustomUrl()")
+    fill_in "link_long_url", with: "www.jaimebigg.com"
     fill_in "link_short_url", with: "xXx"
     click_button "Shorten"
-    link = Link.first
-    expect(link.long_url).to eq("http://www.ryanbigg.com")
+    link = Link.find_by(short_url: "xXx")
+    expect(link.long_url).to eq("http://www.jaimebigg.com")
     expect(link.short_url).to eq("xXx")
   end
 end

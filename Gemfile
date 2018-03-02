@@ -17,6 +17,7 @@ gem 'addressable'
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
+gem 'bootstrap-sass', '~> 3.3'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -29,7 +30,8 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 gem 'chromedriver-helper'
-
+gem "dry-validation", "~> 0.11.1"
+gem 'dry-transaction', '~> 0.10.2'
 gem 'devise'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
@@ -49,6 +51,7 @@ group :development, :test do
   gem 'capybara-selenium'
   gem 'pry'
   gem 'launchy'
+  gem 'factory_bot_rails'
 end
 
 group :development do
