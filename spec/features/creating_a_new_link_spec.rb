@@ -37,7 +37,7 @@ RSpec.feature "Creating a new link" do
     click_button "Create Link"
     link = Link.last
     save_and_open_page
-    expect(page).to have_content("Your link could not be saved Short url has already been taken Long URL Short URL")
+    expect(page).to have_content("Your link could not be saved")
   end
 
   scenario "user is redirected to external site", js: true do

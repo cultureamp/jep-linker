@@ -9,11 +9,12 @@
   </head>
 
   <body>
-  <% if user_signed_in? %>
+    <%= flash[:alert] %>
+    <%= flash[:notice] %>
+    <% if user_signed_in? %>
     <%= render 'devise/menu/login_items' %>
     Hello, <%= current_user.email %>
   <% end %>
-    <%= flash[:alert] %>
     <%= yield %>
   </body>
 </html>

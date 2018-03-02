@@ -12,6 +12,17 @@ RSpec.feature "signing up" do
     fill_in :user_password_confirmation, with: 'jep_password'
     click_button "Sign up"
     expect(page).to have_content("Hello, example@example.com")
+    expect(page).to have_content("Welcome! You have signed up successfully.")
+  end
+
+  scenario "rejects null attributes" do
+    visit new_user_registration_path
+    fill_in :user_email, with: ''
+    fill_in :user_password, with: ''
+    fill_in :user_password_confirmation, with: ''
+    click_button "Sign up"
+    expect(page).to have_content("Email can't be blank")
+    expect(page).to have_content("Password can't be blank")
   end
 
   scenario "rejects invalid emails" do
@@ -20,6 +31,7 @@ RSpec.feature "signing up" do
     fill_in :user_password, with: 'jep_password'
     fill_in :user_password_confirmation, with: 'jep_password'
     click_button "Sign up"
+    expect(page).to have_content("Email is invalid")
     expect(current_path).to eq(user_registration_path)
   end
 
@@ -29,6 +41,6 @@ RSpec.feature "signing up" do
     fill_in :user_password, with: 'jep_password'
     fill_in :user_password_confirmation, with: 'not_jep_password'
     click_button "Sign up"
-    expect(current_path).to eq(user_registration_path)
+    expect(page).to have_content("Password confirmation doesn't match Password")
   end
 end

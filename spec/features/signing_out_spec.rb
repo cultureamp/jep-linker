@@ -6,6 +6,7 @@ RSpec.feature "signing out" do
     login_as(user, :scope => :user)
     visit root_path
     click_link "Logout"
-    expect(logout(:user))
+    save_and_open_page
+    expect(page).to have_content("Signed out successfully.")
   end
 end
