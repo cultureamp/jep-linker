@@ -1,12 +1,16 @@
-<% if errors.any? %>
+<% if errors.present? %>
   <div id="error_explanation">
     <div class="alert alert-danger">
       The form contains <%= pluralize(errors.count, "error") %>.
     </div>
     <ul>
-    <% errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
+      <% errors.each do |msg| %>
+        <% if msg.is_a? Array %>
+          <li><%= msg.flatten.last %></li>
+        <% else %>
+          <li><%= msg %></li>
+        <% end %>
+      <% end %>
     </ul>
   </div>
 <% end %>

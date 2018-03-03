@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180227022003) do
+ActiveRecord::Schema.define(version: 20180228061402) do
 
   create_table "links", force: :cascade do |t|
     t.string "long_url"
@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 20180227022003) do
     t.string "short_url"
     t.boolean "is_custom_url", default: false
     t.integer "user_id"
-    t.index ["long_url"], name: "index_links_on_long_url", unique: true
     t.index ["short_url"], name: "index_links_on_short_url", unique: true
   end
 

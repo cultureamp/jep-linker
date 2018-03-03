@@ -1,0 +1,7 @@
+en:
+  errors:
+    rules:
+      link:
+        url?: "invalid URL format"
+        not_shortening_service?: "shortening services are not allowed"
+        not_links?: "custom URL 'links' is not allowed"

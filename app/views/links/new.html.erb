@@ -13,20 +13,20 @@
 
 <% if @links.any? %>
   <div>
-      <h3>Your <%= "link".pluralize(@links.count) %></h3>
-      <ul>
-        <% @links.each do |link| %>
-          <li>
-            <%= link_to "#{root_url + link.short_url}", "/#{link.short_url}" %>
-            [<%= link_to "remove", link_path(link.id), method: "delete" %>]
-          </li>
-        <% end %>
-      </ul>
+    <h3>Your <%= "link".pluralize(@links.count) %></h3>
+    <ul>
+      <% @links.each do |link| %>
+        <li>
+          <%= link_to "#{root_url + link.short_url}", "/#{link.short_url}" %>
+          [<%= link_to "remove", link_path(link.id), method: "delete" %>]
+        </li>
+      <% end %>
+    </ul>
   </div>
 <% end %>
 
 <%= form_for(@link) do |f| %>
-  <%= render 'shared/error_messages', errors: @link.errors %>
+  <%= render 'shared/error_messages', errors: @errors %>
   <div class="form-group">
     <%= f.label :long_url, "Long URL" %>
     <%= f.text_field :long_url, class: "form-control" %>

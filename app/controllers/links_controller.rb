@@ -11,12 +11,27 @@ class LinksController < ApplicationController
   end
 
   def create
-    @link = Links::Builder.find_or_create(link_params, current_user)
-    if @link.valid?
-      redirect_to @link
-    else
-      render 'new'
+    formatter = Links::Format.new
+    formatter.(link_params) do |formatter_result|
+      formatter_result.success do |attrs|
+        @link = Link.new
+        render :new
+        #stuff goes here
+      end
+
+      formatter_result.failure do |errors|
+        @link = Link.new(link_params)
+        @errors = errors
+        render :new
+      end
     end
+
+    # @link = Links::Builder.build_link(link_params, current_user)
+    # if @link.valid?
+    #   redirect_to @link
+    # else
+    #   render :new
+    # end
   end
 
   def destroy
@@ -26,7 +41,7 @@ class LinksController < ApplicationController
 
   def forward
     @link = Link.find_by(short_url: params[:short_url])
-    redirect_to @link.long_url
+    redirect_to @link.long_url if @link
   end
 
   private
@@ -36,6 +51,6 @@ class LinksController < ApplicationController
   end
 
   def set_links
-    @links = user_signed_in? ? current_user.links : []
+    @links = user_signed_in? ? current_user.links.select(&:persisted?) : []
   end
 end

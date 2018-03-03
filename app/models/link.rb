@@ -1,6 +1,6 @@
 class Link < ApplicationRecord
-  before_save :build_short_url, on: :create
-  before_save { long_url.downcase! }
+  before_validation :build_short_url
+  before_validation { long_url.downcase! }
 
   belongs_to :user, optional: true
 
@@ -12,18 +12,28 @@ class Link < ApplicationRecord
   validates :short_url,
             uniqueness: true,
             length: { maximum: 20, minimum: 1 },
-            allow_blank: true,
+            presence: true,
             format: { without: /\Alinks\z/ }
 
   private
 
   def build_short_url
     if short_url.blank?
-      self.short_url = Links::Builder.generate_short_url
+      self.short_url = generate_short_url
     else
       self.is_custom_url = true
       short_url.downcase!
     end
+  end
+
+  def generate_short_url
+    short_code = generate_short_code
+    short_code = generate_short_code while Link.where(short_url: short_code).exists?
+    short_code
+  end
+
+  def generate_short_code
+    SecureRandom.urlsafe_base64(5).downcase!
   end
 
   def not_a_shortening_service

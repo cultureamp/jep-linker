@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   root "links#new"
-  resources :links
+  resources :links, except: [:index]
   get "/:short_url", to: "links#forward"
 
   namespace :api do
