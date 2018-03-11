@@ -10,6 +10,10 @@ class LinksController < ApplicationController
     @link = Link.find(params[:id])
   end
 
+  def index
+    @links = current_user.links if user_signed_in?
+  end
+
   def create
     if link_params[:long_url].blank? && link_params[:short_url].blank?
       render plain: "Failed to save - please enter your link"
@@ -62,8 +66,4 @@ private
 
 def link_params
   params.require(:link).permit(:long_url, :short_url)
-end
-
-def user_logged_in
-
 end

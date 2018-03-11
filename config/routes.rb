@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'links#new'
 
   post "/", to: "links#create"
+  get "/links", to: "links#index"
   get "/:short_url", to: "links#redirect"
   resources :links
 
