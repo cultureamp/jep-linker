@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :links
 
   namespace :api do
+    resources :links
     get "/status", to: "status#check"
   end
 end
