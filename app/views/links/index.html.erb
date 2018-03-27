@@ -1,0 +1,73 @@
+<div class="jumbotron">
+  <h1 align="center">Linker</h1>
+</div>
+<div class="container">
+  <%= form_tag(links_path, method: "post", class: "form-horizontal") do %>
+    <div class="form-group">
+      <%= label_tag(:long_url, "Long URL", class: "col-sm-2 control-label") %>
+      <div class="col-sm-8">
+        <%= text_field_tag(:long_url, nil, class: "form-control", placeholder: "enter url here")  %>
+      </div>
+    </div>
+    <div class="form-group">
+      <div id="custom-url">
+        <%= label_tag(:custom_url, "Custom URL", class: "col-sm-2 control-label") %>
+        <div class="col-sm-8">
+          <%= text_field_tag(:custom_url, nil, class: "form-control", placeholder: "enter custom url") %>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div align="center">
+        <div class="form-btn">
+          <%= submit_tag("Shorten", class: "form-submit btn btn-primary btn-block") %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div align="center">
+    <div class="custom-btn">
+      <button id="customize" class="btn btn-default btn-block" onClick="showCustomUrl()" >Custom</button>
+    </div>
+  </div>
+</div>
+
+
+<% if user_signed_in? && @user_links.present? %>
+  <div class="container">
+    <table class= "table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>url</th>
+          <th>j.link</th>
+          <th>custom 
+        </tr>
+      </thead>
+      <tbody>
+        <% @user_links.each_with_index do |link, i| %>
+          <tr>
+            <th scope="row"><%= i + 1 %></th>
+            <td><%= link.long_url %></td>
+            <td><%= add_domain << link.short_url %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<% if @shortened_link %>
+  Short link successfully created <%= link_to add_domain << @shortened_link.short_url, @shortened_link.long_url %>
+<% end %> 
+
+<% if flash[:error] %>
+  <div>
+    <ul>
+      <% flash[:error].each do |msg| %>
+        <%= content_tag :li, msg, :id => "error" %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
