@@ -1,6 +1,14 @@
 Rails.application.routes.draw do
-  root 'home#index'
+  devise_for :users
+  root 'links#new'
 
-  post "/", to: "home#create"
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  post "/", to: "links#create"
+  get "/links", to: "links#index"
+  get "/:short_url", to: "links#redirect"
+  resources :links
+
+  namespace :api do
+    resources :links
+    get "/status", to: "status#check"
+  end
 end
