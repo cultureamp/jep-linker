@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'rack-cors', require: 'rack/cors'
+gem 'graphql'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
