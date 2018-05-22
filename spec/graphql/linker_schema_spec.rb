@@ -27,4 +27,21 @@ describe LinkerSchema do
     expect(link["short_url"]).to eq(existing_link.short_url)
     expect(link["long_url"]).to eq(existing_link.long_url)
   end
+
+  it 'fetches single link by short URL' do
+    query = %|
+      query linkQuery {
+        link(shortUrl: "abc123") {
+          long_url
+        }
+      }
+    |
+
+    result = LinkerSchema.execute(
+      query: query
+    )
+
+    link = result.dig("data", "link")
+    expect(link["long_url"]).to eq(existing_link.long_url)
+  end
 end
