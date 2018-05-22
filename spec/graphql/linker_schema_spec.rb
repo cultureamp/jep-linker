@@ -65,4 +65,23 @@ describe LinkerSchema do
     user = result.dig("data", "createUser")
     expect(user["email"]).to eq("user@test.com")
   end
+
+  it 'signs in a user' do
+    mutation = %|
+      mutation {
+        signinUser(
+          email: "some@email.com",
+          token: "#{user.token}"
+        ) {
+          user {
+            email
+          }
+        }
+      }
+    |
+
+    result = LinkerSchema.execute(query: mutation)
+    user = result.dig("data", "signinUser", "user")
+    expect(user["email"]).to eq("some@email.com")
+  end
 end

@@ -1,5 +1,5 @@
 class Link < ApplicationRecord
-  before_validation { check_short_url }
+  before_save { check_short_url }
 
   belongs_to :user
 
