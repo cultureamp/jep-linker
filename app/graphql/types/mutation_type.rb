@@ -8,4 +8,5 @@ Types::MutationType = GraphQL::ObjectType.define do
       "Hello World!"
     }
   end
+  field :createUser, function: Resolvers::CreateUser.new
 end

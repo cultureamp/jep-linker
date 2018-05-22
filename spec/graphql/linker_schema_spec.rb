@@ -44,4 +44,25 @@ describe LinkerSchema do
     link = result.dig("data", "link")
     expect(link["long_url"]).to eq(existing_link.long_url)
   end
+
+  it 'creates a user' do
+    mutation = %|
+      mutation {
+        createUser(
+          authProvider: {
+            email: {
+              email: "user@test.com",
+              password: "password"
+            }
+          }
+        ) {
+          email
+        }
+      }
+    |
+
+    result = LinkerSchema.execute(query: mutation)
+    user = result.dig("data", "createUser")
+    expect(user["email"]).to eq("user@test.com")
+  end
 end
