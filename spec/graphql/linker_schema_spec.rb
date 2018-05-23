@@ -1,10 +1,12 @@
 require 'rails_helper'
 
 describe LinkerSchema do
-  let(:user) { User.create!(email: "some@email.com", password: "password") }
-  let!(:existing_link) { Link.create!(short_url: "abc123", long_url: "http://www.google.com", user: user) }
+  let!(:user) { User.create!(email: "some@email.com", password: "password") }
+  let!(:other_user) { User.create!(email: "other@email.com", password: "password") }
+  let!(:first_link) { Link.create!(short_url: "abc123", long_url: "http://www.google.com", user: user) }
+  let!(:second_link) { Link.create!(short_url: "other", long_url: "http://www.other.com", user: other_user) }
 
-  it "fetches all the links" do
+  it "fetches all the links for the user" do
     query = %|
       query {
         allLinks {
@@ -16,16 +18,17 @@ describe LinkerSchema do
     |
 
     result = LinkerSchema.execute(
-      query: query
+      query: query,
+      context: { current_user: user }
     )
 
     links = result.dig("data", "allLinks")
     expect(links.count).to eq(1)
 
     link = links.first
-    expect(link["id"]).to eq(existing_link.id.to_s)
-    expect(link["short_url"]).to eq(existing_link.short_url)
-    expect(link["long_url"]).to eq(existing_link.long_url)
+    expect(link["id"]).to eq(first_link.id.to_s)
+    expect(link["short_url"]).to eq(first_link.short_url)
+    expect(link["long_url"]).to eq(first_link.long_url)
   end
 
   it 'fetches single link by short URL' do
@@ -38,11 +41,12 @@ describe LinkerSchema do
     |
 
     result = LinkerSchema.execute(
-      query: query
+      query: query,
+      context: { current_user: user }
     )
 
     link = result.dig("data", "link")
-    expect(link["long_url"]).to eq(existing_link.long_url)
+    expect(link["long_url"]).to eq(first_link.long_url)
   end
 
   it 'creates a user' do
@@ -71,8 +75,9 @@ describe LinkerSchema do
       mutation {
         signinUser(
           email: "some@email.com",
-          token: "#{user.token}"
+          password: "password"
         ) {
+          token
           user {
             email
           }
