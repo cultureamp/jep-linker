@@ -1,34 +1,33 @@
+require 'SecureRandom'
+
 class Resolvers::SignInUser < GraphQL::Function
   argument :email, !types.String
-  argument :token, !types.String
+  argument :password, !types.String
 
+  # defines inline return type for the mutation
   type do
     name 'SigninPayload'
 
-    field :session_token, types.String
+    field :token, types.String
     field :user, Types::UserType
   end
 
   def call(_obj, args, _ctx)
     email = args[:email]
-    token = args[:token]
+    password = args[:password]
 
-    # basic validation
-    return unless email
-    return unless token
+    return unless email && password
+    user = User.find_by(email: email)
 
-    user = User.find_by(email: email, token: token)
-
-    # ensures we have the correct user
     return unless user
+    return unless user.valid_password?(password)
 
-    # use Ruby on Rails - ActiveSupport::MessageEncryptor, to build a token
-    crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base.byteslice(0..31))
-    session_token = crypt.encrypt_and_sign("user-id:#{ user.id }")
+    token = SecureRandom.hex(16)
+    user.update_attributes(token: token)
 
     OpenStruct.new({
       user: user,
-      session_token: session_token
+      token: token
     })
   end
 end
