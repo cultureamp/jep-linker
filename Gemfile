@@ -39,6 +39,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'pry'
+  gem 'pry-nav'
 end
 
 group :development do
