@@ -6,4 +6,5 @@ Types::LinkType = GraphQL::ObjectType.define do
   field :id, !types.ID
   field :short_url, !types.String
   field :long_url, !types.String
+  field :postedBy, -> { Types::UserType }, property: :user
 end
