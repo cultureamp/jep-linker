@@ -6,7 +6,7 @@ Types::QueryType = GraphQL::ObjectType.define do
   # queries are just represented as fields
   field :allLinks, !types[Types::LinkType] do
     # resolve would be called in order to fetch data for that field
-    resolve -> (obj, args, ctx) { Link.where(user: ctx[:current_user]) }
+    resolve -> (obj, args, ctx) { Link.all }
   end
 
   field :link, Types::LinkType do
